@@ -1,0 +1,86 @@
+// Import necessary modules
+const { useState } = require("react");
+
+function Calculator() {
+  const [inputs, setInputs] = useState({
+    monthlyVisitors: "",
+    conversionRate: "",
+    averageOrderValue: "",
+  });
+
+  const [output, setOutput] = useState(null);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setInputs({ ...inputs, [name]: value });
+  };
+
+  const calculateMissedRevenue = () => {
+    const {
+      monthlyVisitors,
+      conversionRate,
+      averageOrderValue,
+    } = inputs;
+
+    // Convert percentage inputs to decimals
+    const conversionRateDecimal = parseFloat(conversionRate) / 100;
+
+    // Calculate potential metrics
+    const totalLeads = monthlyVisitors * conversionRateDecimal;
+    const anonymousVisitors = monthlyVisitors - totalLeads;
+    const identifiableVisitors = anonymousVisitors * 0.30;
+    const verifiedVisitors = identifiableVisitors * 0.80;
+    const reOptedInVisitors = verifiedVisitors * 0.15;
+    const reactivatedSales = reOptedInVisitors * 0.03;
+    const missedRevenue = reactivatedSales * averageOrderValue;
+    const cost = verifiedVisitors * 0.80;
+    const roi = (missedRevenue - cost) / cost * 100;
+
+    setOutput({
+      anonymousVisitors: Math.round(anonymousVisitors).toLocaleString(),
+      identifiableVisitors: Math.round(identifiableVisitors).toLocaleString(),
+      verifiedVisitors: Math.round(verifiedVisitors).toLocaleString(),
+      reOptedInVisitors: Math.round(reOptedInVisitors).toLocaleString(),
+      reactivatedSales: Math.round(reactivatedSales).toLocaleString(),
+      missedRevenue: `$${Math.round(missedRevenue).toLocaleString()}`,
+      cost: `$${Math.round(cost).toLocaleString()}`,
+      roi: `${Math.round(roi).toLocaleString()}%`,
+    });
+  };
+
+  return (
+    `<div class='calculator'>
+      <h1>Home Service Revenue Calculator</h1>
+      <p>Fill in the details below to see your missed revenue opportunities.</p>
+      <div>
+        <label>Monthly Website Visitors</label>
+        <input type='number' name='monthlyVisitors' value='${inputs.monthlyVisitors}' onChange='${handleChange}' placeholder='e.g., 2000'/>
+      </div>
+      <div>
+        <label>Sales Conversion Rate (%)</label>
+        <input type='number' name='conversionRate' value='${inputs.conversionRate}' onChange='${handleChange}' placeholder='e.g., 5'/>
+      </div>
+      <div>
+        <label>Average Order Value ($)</label>
+        <input type='number' name='averageOrderValue' value='${inputs.averageOrderValue}' onChange='${handleChange}' placeholder='e.g., 500'/>
+      </div>
+      <button onClick='${calculateMissedRevenue}'>Calculate</button>
+
+      ${output ? `
+        <div>
+          <h2>Your Results</h2>
+          <p><strong>Anonymous Visitors:</strong> ${output.anonymousVisitors}</p>
+          <p><strong>Identifiable Visitors:</strong> ${output.identifiableVisitors}</p>
+          <p><strong>Verified Visitors:</strong> ${output.verifiedVisitors}</p>
+          <p><strong>Re-Opted-In Visitors:</strong> ${output.reOptedInVisitors}</p>
+          <p><strong>Reactivated Sales:</strong> ${output.reactivatedSales}</p>
+          <p><strong>Missed Revenue Opportunity:</strong> ${output.missedRevenue}</p>
+          <p><strong>Cost of Investment:</strong> ${output.cost}</p>
+          <p><strong>Return on Investment (ROI):</strong> ${output.roi}</p>
+        </div>
+      ` : ''}
+    </div>`
+  );
+}
+
+module.exports = Calculator;
