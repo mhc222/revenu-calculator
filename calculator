@@ -1,5 +1,4 @@
-// Import necessary modules
-const { useState } = require("react");
+import React, { useState } from "react";
 
 function Calculator() {
   const [inputs, setInputs] = useState({
@@ -49,38 +48,56 @@ function Calculator() {
   };
 
   return (
-    `<div class='calculator'>
+    <div className="calculator">
       <h1>Home Service Revenue Calculator</h1>
       <p>Fill in the details below to see your missed revenue opportunities.</p>
       <div>
         <label>Monthly Website Visitors</label>
-        <input type='number' name='monthlyVisitors' value='${inputs.monthlyVisitors}' onChange='${handleChange}' placeholder='e.g., 2000'/>
+        <input
+          type="number"
+          name="monthlyVisitors"
+          value={inputs.monthlyVisitors}
+          onChange={handleChange}
+          placeholder="e.g., 2000"
+        />
       </div>
       <div>
         <label>Sales Conversion Rate (%)</label>
-        <input type='number' name='conversionRate' value='${inputs.conversionRate}' onChange='${handleChange}' placeholder='e.g., 5'/>
+        <input
+          type="number"
+          name="conversionRate"
+          value={inputs.conversionRate}
+          onChange={handleChange}
+          placeholder="e.g., 5"
+        />
       </div>
       <div>
         <label>Average Order Value ($)</label>
-        <input type='number' name='averageOrderValue' value='${inputs.averageOrderValue}' onChange='${handleChange}' placeholder='e.g., 500'/>
+        <input
+          type="number"
+          name="averageOrderValue"
+          value={inputs.averageOrderValue}
+          onChange={handleChange}
+          placeholder="e.g., 500"
+        />
       </div>
-      <button onClick='${calculateMissedRevenue}'>Calculate</button>
+      <button onClick={calculateMissedRevenue}>Calculate</button>
 
-      ${output ? `
+      {output && (
         <div>
           <h2>Your Results</h2>
-          <p><strong>Anonymous Visitors:</strong> ${output.anonymousVisitors}</p>
-          <p><strong>Identifiable Visitors:</strong> ${output.identifiableVisitors}</p>
-          <p><strong>Verified Visitors:</strong> ${output.verifiedVisitors}</p>
-          <p><strong>Re-Opted-In Visitors:</strong> ${output.reOptedInVisitors}</p>
-          <p><strong>Reactivated Sales:</strong> ${output.reactivatedSales}</p>
-          <p><strong>Missed Revenue Opportunity:</strong> ${output.missedRevenue}</p>
-          <p><strong>Cost of Investment:</strong> ${output.cost}</p>
-          <p><strong>Return on Investment (ROI):</strong> ${output.roi}</p>
+          <p><strong>Anonymous Visitors:</strong> {output.anonymousVisitors}</p>
+          <p><strong>Identifiable Visitors:</strong> {output.identifiableVisitors}</p>
+          <p><strong>Verified Visitors:</strong> {output.verifiedVisitors}</p>
+          <p><strong>Re-Opted-In Visitors:</strong> {output.reOptedInVisitors}</p>
+          <p><strong>Reactivated Sales:</strong> {output.reactivatedSales}</p>
+          <p><strong>Missed Revenue Opportunity:</strong> {output.missedRevenue}</p>
+          <p><strong>Cost of Investment:</strong> {output.cost}</p>
+          <p><strong>Return on Investment (ROI):</strong> {output.roi}</p>
         </div>
-      ` : ''}
-    </div>`
+      )}
+    </div>
   );
 }
 
-module.exports = Calculator;
+export default Calculator;
